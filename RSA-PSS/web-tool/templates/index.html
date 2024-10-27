@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RSA-PSS署名アプリ</title>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+</head>
+<body>
+    <h1>RSA-PSS署名アプリ</h1>
+    
+    <h2>キーペア生成</h2>
+    <button onclick="generateKeys()">キーペア生成</button>
+    <div>
+        <h3>秘密鍵:</h3>
+        <textarea id="privateKey" rows="5" cols="50"  placeholder="秘密鍵"></textarea>
+        <h3>公開鍵:</h3>
+        <textarea id="publicKey" rows="5" cols="50"  placeholder="公開鍵"></textarea>
+    </div>
+
+    <h2>署名生成</h2>
+    <textarea id="message" rows="3" cols="50" placeholder="メッセージを入力"></textarea><br>
+    <button onclick="sign()">署名</button>
+    <div>
+        <h3>署名:</h3>
+        <textarea id="signature" rows="3" cols="50"  placeholder="署名値(HEX)"></textarea>
+    </div>
+
+    <h2>署名検証</h2>
+    <button onclick="verify()">検証</button>
+    <div id="verificationResult"></div>
+
+    <script>
+        async function generateKeys() {
+            const response = await axios.post('/generate_keys');
+            document.getElementById('privateKey').value = response.data.private_key;
+            document.getElementById('publicKey').value = response.data.public_key;
+        }
+
+        async function sign() {
+            const message = document.getElementById('message').value;
+            const privateKey = document.getElementById('privateKey').value;
+            const response = await axios.post('/sign', { message, private_key: privateKey });
+            document.getElementById('signature').value = response.data.signature;
+        }
+
+        async function verify() {
+            const message = document.getElementById('message').value;
+            const signature = document.getElementById('signature').value;
+            const publicKey = document.getElementById('publicKey').value;
+            const response = await axios.post('/verify', { message, signature, public_key: publicKey });
+            document.getElementById('verificationResult').innerText = response.data.is_valid ? '署名は有効です' : '署名は無効です';
+        }
+    </script>
+</body>
+</html>
