@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HEX変換ツール</title>
+    <style>
+        body { font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; }
+        form { margin-bottom: 20px; }
+        input, select { margin-bottom: 10px; }
+        #result { font-weight: bold; font-family: monospace; }
+    </style>
+</head>
+<body>
+    <h1>HEX変換ツール</h1>
+    <form method="POST">
+        <label for="hex_input">16進数を入力してください（0xなし）:</label><br>
+        <input type="text" id="hex_input" name="hex_input" required><br>
+        
+        <label for="bytes_count">バイト数を選択:</label><br>
+        <select id="bytes_count" name="bytes_count">
+            <option value="1">1バイト</option>
+            <option value="2">2バイト</option>
+            <option value="4">4バイト</option>
+            <option value="8">8バイト</option>
+        </select><br>
+        
+        <input type="submit" value="変換">
+    </form>
+    
+    {% if result %}
+    <h2>結果:</h2>
+    <p id="result">{{ result }}</p>
+    {% endif %}
+</body>
+</html>
